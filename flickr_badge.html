@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery.getJSON demo</title>
+	<style>
+		img {
+			height: 100px;
+			float: left;
+		}
+	</style>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+</head>
+<body>
+  
+<textarea id="text" cols="80" rows="10"></textarea>
+<div id="photo"></div>
+<!-- usage: flickr_badge.html?[photoset_id] -->  
+<script>
+(function() {
+	var textarea = document.getElementById("text");
+	var div = document.getElementById("photo");
+	var photoset = location.search.substring(1);
+	var flickerAPI = "https://api.flickr.com/services/rest/?jsoncallback=?";
+
+	$.getJSON( flickerAPI, {
+		format: "json",
+		method: "flickr.photosets.getPhotos",
+		user_id: "49851674@N00",
+		photoset_id: photoset,
+		api_key: "5777a54835e0017751a19f7644599eac",
+	})
+    .done(function jsonFlickrApi( data ) {
+    	var photos = data.photoset.photo;
+    	var str= "";
+		for(var i = 0; i < photos.length; i++){
+			str += "<a href=\"https://www.flickr.com/photos/vicjuan/" 
+				+ photos[i].id 
+				+ "\"><img src=\"https://farm" 
+				+ photos[i].farm 
+				+ ".staticflickr.com/" 
+				+ photos[i].server 
+				+ "/" 
+				+ photos[i].id 
+				+ "_" 
+				+ photos[i].secret 
+				+ "_s.jpg\"></a>";
+		}
+		textarea.innerHTML = str;
+		div.innerHTML = str;
+	});
+})();
+</script>
+  
+</body>
+</html>
